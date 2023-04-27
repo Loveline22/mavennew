@@ -1,0 +1,37 @@
+pipeline
+{
+ agent any
+  stages
+  {
+     stage('continousDownload')
+      
+      {
+          steps {
+              git 'https://github.com/Loveline22/mavennew.git'
+          }
+      } 
+      stage('continousBuild')
+     {
+         steps {
+             sh 'mvn package'
+         }
+     }
+     stage('continousDeployment')
+     {
+         steps {
+             deploy adapters: [tomcat9(credentialsId: '818d0a21-639e-4ea7-8d23-9a7ecacfcbe6', path: '', url: 'http://172.31.86.215:8080')], contextPath: 'qaapp', war: '**/*.war'
+         }
+     }
+     stage ('continousTesting')
+     {
+         steps{
+            git 'https://github.com/Loveline22/FunctionalTesting.git' 
+         }
+     }
+
+
+
+
+}
+}
+
